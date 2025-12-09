@@ -1,0 +1,15 @@
+{
+  "task": "Move to home and get the world state.",
+  "plan": [
+    {
+      "tool": "move_to_named_pose",
+      "args": {
+        "pose_name": "home"
+      }
+    },
+    {
+      "tool": "get_world_state",
+      "args": {}
+    }
+  ]
+}

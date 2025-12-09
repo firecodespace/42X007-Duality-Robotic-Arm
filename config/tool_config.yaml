@@ -1,0 +1,52 @@
+tools:
+  - name: move_to_position
+    description: "Move the robot end-effector to an absolute XYZ position using IK."
+    params:
+      x: {type: float, required: true}
+      y: {type: float, required: true}
+      z: {type: float, required: true}
+      speed: {type: float, required: false}
+  - name: move_to_named_pose
+    description: "Move the arm to a predefined safe pose such as 'home' or 'drop_zone'."
+    params:
+      pose_name: {type: string, required: true}
+  - name: move_above_object
+    description: "Move directly above a known object with a given height offset."
+    params:
+      object_name: {type: string, required: true}
+      dz: {type: float, required: true}
+  - name: move_relative
+    description: "Move the end-effector by a small offset relative to its current position."
+    params:
+      dx: {type: float, required: true}
+      dy: {type: float, required: true}
+      dz: {type: float, required: true}
+  - name: open_gripper
+    description: "Open the gripper fully."
+    params: {}
+  - name: close_gripper
+    description: "Close the gripper fully."
+    params: {}
+  - name: pick_object
+    description: "Pick an object by approaching, closing the gripper, and lifting."
+    params:
+      object_name: {type: string, required: true}
+  - name: place_object_at
+    description: "Place the held object at either a position or named pose."
+    params:
+      target_type: {type: string, required: true, enum: ["position", "named_pose"]}
+      x: {type: float, required: false}
+      y: {type: float, required: false}
+      z: {type: float, required: false}
+      pose_name: {type: string, required: false}
+  - name: press_button
+    description: "Press a specified button-like object."
+    params:
+      button_name: {type: string, required: true}
+  - name: get_world_state
+    description: "Query the current robot and object state."
+    params: {}
+  - name: wait_until_still
+    description: "Wait until robot stops moving or timeout is reached."
+    params:
+      timeout_s: {type: float, required: true}

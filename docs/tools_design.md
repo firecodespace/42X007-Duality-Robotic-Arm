@@ -39,7 +39,7 @@ Positions end-effector directly above the object's pose plus an offset.
 
 ---
 
-### **move_to_named_target**
+### **move_to_named_pose**
 Moves to predefined poses such as:
 - "home"
 - "pre_grasp"
