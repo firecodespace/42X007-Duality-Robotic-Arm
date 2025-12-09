@@ -14,9 +14,6 @@ A production-grade robotics–AI pipeline integrating:
 - Scenario benchmarking
 - Gemini 2.5 / 3.0 comparison
 
-## Repo Structure
-(Describe folders…)
-
 ## How to Run (VM)
 1. `source /opt/ros/humble/setup.bash`
 2. `cd ~/ros2_ws`
