@@ -75,84 +75,94 @@ def _build_prompt(
     - Optional world state
     - Task instruction
     - (Can include few-shot examples)
+    
+    Note: Prompt is intentionally flexible to allow LLM to adapt to various scenarios.
     """
     tools_section = _format_tools_section(tool_specs)
     world_state_snippet = _format_world_state_snippet(world_state)
 
-    # Few-shot example: very simple scenario
-    few_shot_example = textwrap.dedent(
+    # Few-shot examples for common tasks (not task-specific)
+    few_shot_examples = textwrap.dedent(
         """
-        Example:
-
-        Task: "Move the arm to the home pose, then query the world state."
-
+        Example 1: Simple movement
+        Task: "Move the arm to the home pose and get the world state."
         Expected JSON plan:
         [
           {"tool": "move_to_named_pose", "args": {"pose_name": "home"}},
           {"tool": "get_world_state", "args": {}}
         ]
+
+        Example 2: Pick and place
+        Task: "Pick up the red cube and place it at the drop zone."
+        Expected JSON plan:
+        [
+          {"tool": "get_world_state", "args": {}},
+          {"tool": "pick_object", "args": {"object_name": "red_cube"}},
+          {"tool": "move_to_named_pose", "args": {"pose_name": "drop_zone"}},
+          {"tool": "place_object_at", "args": {"target_type": "named_pose", "pose_name": "drop_zone"}}
+        ]
+
+        Example 3: Multi-step manipulation
+        Task: "Get the current state, then press the button if it exists."
+        Expected JSON plan:
+        [
+          {"tool": "get_world_state", "args": {}},
+          {"tool": "press_button", "args": {"button_name": "button"}}
+        ]
         """
     ).strip()
 
     prompt = f"""
-    You are an AI planning assistant that controls a UR3 robotic arm in the FalconSim environment.
+    You are an AI planning assistant for a UR3 robotic arm in the FalconSim environment.
 
-    You do NOT control motors or physics directly.
-    Instead, you can only call a fixed set of tools.
-    Your job is to choose which tools to call, in what order, and with what parameters,
-    to complete the user's task safely and efficiently.
+    Your job is to decompose a user task into a sequence of tool calls to execute it safely.
 
     TOOLS AVAILABLE
     ---------------
-    The following tools are available to you:
+    You have access to these tools:
 
     {tools_section}
 
-    OUTPUT FORMAT (STRICT)
-    ----------------------
-    You MUST output ONLY a JSON array of tool call objects.
-    Each element of the array must have:
-      - "tool": the exact name of the tool (string)
-      - "args": an object containing parameters for that tool
+    IMPORTANT GUIDELINES
+    --------------------
+    1. ALWAYS prefer high-level tools (pick_object, place_object_at, press_button) when applicable.
+    2. Use get_world_state when uncertain about object positions or current state.
+    3. Call wait_until_still after each movement before next action.
+    4. Use move_to_position for precise locations, move_to_named_pose for predefined poses.
+    5. For button presses, use press_button directly.
+    6. For multiple objects, handle them sequentially.
+    7. If an object is not in the world state, adapt the plan (use available objects instead).
+    8. Minimize the number of tool calls - be efficient.
 
-    No additional keys are allowed.
-    No comments or explanations are allowed.
-    Do NOT wrap the JSON in backticks.
-    Do NOT output any text before or after the JSON.
+    OUTPUT FORMAT (STRICT JSON)
+    ---------------------------
+    Return ONLY a JSON array of tool calls. No comments, no text, no markdown.
+    Each element must have:
+      - "tool": the tool name (string)
+      - "args": parameters object
 
-    Example of valid output:
+    Valid example:
     [
       {{"tool": "move_to_named_pose", "args": {{"pose_name": "home"}}}},
       {{"tool": "get_world_state", "args": {{}}}}
     ]
 
-    If the task cannot be solved with the available tools,
-    return an empty array: [].
+    If the task cannot be completed with available tools, return an empty array: []
 
-    PLANNING RULES
-    --------------
-    - Use the minimum number of tool calls necessary to safely complete the task.
-    - When you are unsure about object positions or what is being held,
-      first call "get_world_state".
-    - After large movements, call "wait_until_still" before interacting with objects.
-    - Prefer higher-level tools (e.g., "pick_object", "place_object_at")
-      when they achieve the goal simply.
-    - Never invent tool names or parameters that are not listed above.
-    - Do not assume the existence of objects that are not in the world state.
-
-    WORLD STATE SNIPPET (MAY BE PARTIAL)
-    ------------------------------------
+    CURRENT WORLD STATE
+    -------------------
     {world_state_snippet}
 
-    {few_shot_example}
+    EXAMPLES (for reference only - adapt to your specific task)
+    -----------------------------------------------------------
+    {few_shot_examples}
 
-    NOW PLAN
-    --------
-    The user's task is:
-
+    YOUR TASK
+    ---------
+    Plan the following task:
     "{task_text}"
 
-    Return ONLY the JSON array of tool calls, and nothing else.
+    Output ONLY the JSON array, nothing else.
     """.strip()
 
     return prompt

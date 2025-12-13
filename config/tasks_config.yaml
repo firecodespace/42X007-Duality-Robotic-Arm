@@ -1,0 +1,141 @@
+tasks:
+  # Task 1: Simple manipulation - pick and place
+  - id: 1
+    name: "pick_and_place_basic"
+    description: "Pick an object and place it at a target location"
+    instructions: "Pick up the red_cube and place it at the drop_zone"
+    expected_tools:
+      - "get_world_state"
+      - "pick_object"
+      - "place_object_at"
+    required_objects:
+      - "red_cube"
+    target_location: "drop_zone"
+    difficulty: "easy"
+
+  # Task 2: Multi-step manipulation with button
+  - id: 2
+    name: "press_button_sequence"
+    description: "Press a button to trigger an action"
+    instructions: "Move to home position, then press the button"
+    expected_tools:
+      - "move_to_named_pose"
+      - "press_button"
+      - "wait_until_still"
+    required_objects:
+      - "button"
+    difficulty: "easy"
+
+  # Task 3: Precise positioning
+  - id: 3
+    name: "position_object_precisely"
+    description: "Place object at a specific coordinate"
+    instructions: "Pick the blue_sphere and move it to position x=0.5, y=0.3, z=0.2"
+    expected_tools:
+      - "get_world_state"
+      - "pick_object"
+      - "move_to_position"
+      - "place_object_at"
+    required_objects:
+      - "blue_sphere"
+    difficulty: "medium"
+
+  # Task 4: Multiple object manipulation
+  - id: 4
+    name: "rearrange_objects"
+    description: "Pick multiple objects and arrange them"
+    instructions: "Pick up the green_block, move it above the blue_cube, then place it next to the red_cube"
+    expected_tools:
+      - "get_world_state"
+      - "pick_object"
+      - "move_above_object"
+      - "move_relative"
+      - "place_object_at"
+    required_objects:
+      - "green_block"
+      - "blue_cube"
+      - "red_cube"
+    difficulty: "medium"
+
+  # Task 5: Complex pick-place-pick sequence
+  - id: 5
+    name: "sequential_manipulation"
+    description: "Pick multiple objects in sequence and move them"
+    instructions: "Pick red_cube, place it in zone_A, then pick yellow_block and place it in zone_B"
+    expected_tools:
+      - "get_world_state"
+      - "pick_object"
+      - "move_to_named_pose"
+      - "place_object_at"
+      - "wait_until_still"
+    required_objects:
+      - "red_cube"
+      - "yellow_block"
+    target_locations:
+      - "zone_A"
+      - "zone_B"
+    difficulty: "hard"
+
+  # Task 6: Conditional manipulation with state checking
+  - id: 6
+    name: "adaptive_placement"
+    description: "Check state and adapt placement strategy"
+    instructions: "Get world state, then pick available object and place it at home position"
+    expected_tools:
+      - "get_world_state"
+      - "pick_object"
+      - "move_to_named_pose"
+      - "place_object_at"
+    required_objects: []  # Will adapt based on available objects
+    difficulty: "hard"
+
+# Fallback strategies for graceful failure
+fallback_strategies:
+  pick_object_failure:
+    - name: "retry_with_offset"
+      description: "Retry pick from slightly different angle"
+      parameters:
+        offset_xy: 0.05
+        max_retries: 2
+    - name: "use_move_above_then_close"
+      description: "Use lower-level tools instead of composite"
+      tools:
+        - "move_above_object"
+        - "move_relative"
+        - "close_gripper"
+
+  place_object_failure:
+    - name: "place_at_home"
+      description: "If target placement fails, move to home position"
+      tool: "move_to_named_pose"
+      params:
+        pose_name: "home"
+
+  movement_timeout:
+    - name: "force_stop_and_retry"
+      description: "Stop and attempt movement again"
+      parameters:
+        retry_count: 1
+        reduced_speed: true
+    - name: "use_relative_move"
+      description: "Fall back to relative movement"
+      tool: "move_relative"
+
+# World state validation
+validation:
+  required_keys:
+    - "object_poses"
+    - "ee_pose"
+    - "is_moving"
+  optional_keys:
+    - "held_item"
+    - "gripper_state"
+
+# Execution settings
+execution:
+  default_speed: 0.5
+  max_retries: 2
+  timeout_per_action_s: 10.0
+  motion_poll_interval_s: 0.1
+  log_all_attempts: true
+  graceful_degradation: true

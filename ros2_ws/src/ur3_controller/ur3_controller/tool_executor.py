@@ -1,13 +1,29 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, Tuple
+import time
 
 from .planner import ToolCall
 from .defined_tools import ToolSpec, get_tool_specs
 from .utils.logging_utils import setup_logger
 from .utils.ros_utils import UR3ROSInterface
+from .error_handler import GracefulErrorHandler
 
 logger = setup_logger(__name__)
+
+
+class ExecutionResult:
+    """Track execution status of a tool call."""
+    def __init__(self, tool_name: str, success: bool, error_msg: str = "", attempt: int = 1):
+        self.tool_name = tool_name
+        self.success = success
+        self.error_msg = error_msg
+        self.attempt = attempt
+        self.timestamp = time.time()
+
+    def __repr__(self):
+        status = "✓" if self.success else "✗"
+        return f"{status} {self.tool_name} (attempt {self.attempt}): {self.error_msg or 'success'}"
 
 
 class ToolExecutor:
@@ -16,22 +32,94 @@ class ToolExecutor:
 
     Each public tool method translates into one or more ROS-level
     commands on the UR3ROSInterface.
+    
+    Features:
+    - Graceful error handling with retries
+    - Execution tracking and logging
+    - Fallback strategies for common failures
     """
 
     def __init__(self, ros_interface: UR3ROSInterface, tool_specs: List[ToolSpec] | None = None) -> None:
         self.ros = ros_interface
         self.tool_specs = tool_specs or get_tool_specs()
         self.tool_map: Dict[str, ToolSpec] = {t.name: t for t in self.tool_specs}
+        self.execution_log: List[ExecutionResult] = []
+        self.error_handler = GracefulErrorHandler()
+        self.max_retries = 2
+        self.failed_tools: List[str] = []
 
-    def execute_plan(self, plan: List[ToolCall]) -> None:
+    def execute_plan(self, plan: List[ToolCall]) -> Tuple[bool, str]:
+        """
+        Execute plan with graceful degradation.
+        
+        Returns:
+            (success: bool, summary: str)
+        """
         logger.info(f"Executing plan with {len(plan)} steps.")
+        self.execution_log.clear()
+        self.failed_tools.clear()
+        
+        completed_steps = 0
         for idx, call in enumerate(plan):
-            logger.info(f"Executing step {idx}: {call.tool}({call.args})")
-            try:
-                self.execute_step(call)
-            except Exception as e:
-                logger.error(f"Error executing step {idx} ({call.tool}): {e}")
-                break
+            logger.info(f"[Step {idx+1}/{len(plan)}] {call.tool}({call.args})")
+            success = self._execute_with_retry(call)
+            
+            if success:
+                completed_steps += 1
+            else:
+                logger.warning(f"Tool '{call.tool}' failed, continuing with next steps...")
+                self.failed_tools.append(call.tool)
+        
+        summary = self._generate_summary(len(plan), completed_steps)
+        return completed_steps > 0, summary
+
+    def _execute_with_retry(self, call: ToolCall, attempt: int = 1) -> bool:
+        """Execute a single tool call with retry logic and graceful fallback."""
+        try:
+            self.execute_step(call)
+            result = ExecutionResult(call.tool, success=True, attempt=attempt)
+            self.execution_log.append(result)
+            logger.debug(f"Tool '{call.tool}' succeeded on attempt {attempt}")
+            return True
+        except Exception as e:
+            error_msg = str(e)
+            result = ExecutionResult(call.tool, success=False, error_msg=error_msg, attempt=attempt)
+            self.execution_log.append(result)
+            
+            # Use error handler to decide on recovery strategy
+            handling_info = self.error_handler.handle_tool_failure(
+                tool_name=call.tool,
+                error=e,
+                attempt=attempt,
+                max_retries=self.max_retries
+            )
+            
+            if handling_info["action"] == "retry":
+                logger.info(f"Retrying '{call.tool}'...")
+                time.sleep(0.5)
+                return self._execute_with_retry(call, attempt=attempt + 1)
+            elif handling_info["action"] == "skip":
+                logger.warning(f"Skipping '{call.tool}' due to fallback strategy")
+                self.failed_tools.append(call.tool)
+                return False
+            elif handling_info["action"] == "fallback":
+                logger.warning(f"Fallback strategy applied for '{call.tool}', continuing...")
+                self.failed_tools.append(call.tool)
+                return False
+            else:  # abort
+                logger.error(f"Critical failure in '{call.tool}', cannot continue")
+                self.failed_tools.append(call.tool)
+                return False
+
+    def _generate_summary(self, total_steps: int, completed_steps: int) -> str:
+        """Generate execution summary."""
+        success_rate = (completed_steps / total_steps * 100) if total_steps > 0 else 0
+        summary = f"Execution Summary: {completed_steps}/{total_steps} steps completed ({success_rate:.1f}%)"
+        
+        if self.failed_tools:
+            summary += f"\nFailed tools: {', '.join(self.failed_tools)}"
+        
+        return summary
 
     def execute_step(self, call: ToolCall) -> None:
         tool_name = call.tool
@@ -122,17 +210,30 @@ class ToolExecutor:
         dz_down = 0.10
         dz_up = 0.10
 
-        self._move_above_object(object_name=object_name, dz=dz_above)
-        self._wait_until_still(timeout_s=5.0)
+        try:
+            self._move_above_object(object_name=object_name, dz=dz_above)
+            self._wait_until_still(timeout_s=5.0)
 
-        self._move_relative(dx=0.0, dy=0.0, dz=-dz_down)
-        self._wait_until_still(timeout_s=5.0)
+            self._move_relative(dx=0.0, dy=0.0, dz=-dz_down)
+            self._wait_until_still(timeout_s=5.0)
 
-        self._close_gripper()
-        self._wait_until_still(timeout_s=5.0)
+            self._close_gripper()
+            self._wait_until_still(timeout_s=5.0)
 
-        self._move_relative(dx=0.0, dy=0.0, dz=dz_up)
-        self._wait_until_still(timeout_s=5.0)
+            self._move_relative(dx=0.0, dy=0.0, dz=dz_up)
+            self._wait_until_still(timeout_s=5.0)
+            
+            logger.info(f"Successfully picked {object_name}")
+        except Exception as e:
+            logger.warning(f"Pick operation for {object_name} encountered issue: {e}")
+            # Attempt to recover by opening gripper and moving up
+            try:
+                self._open_gripper()
+                self._move_relative(dx=0.0, dy=0.0, dz=0.15)
+                self._wait_until_still(timeout_s=3.0)
+            except:
+                pass
+            raise
 
     def _place_object_at(
         self,
