@@ -1,0 +1,3 @@
+[console_scripts]
+ur3_controller_node = ur3_controller.ur3_controller_node:main
+

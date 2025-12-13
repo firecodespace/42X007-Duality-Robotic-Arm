@@ -1,0 +1,23 @@
+running egg_info
+writing ../../build/ur3_controller/ur3_controller.egg-info/PKG-INFO
+writing dependency_links to ../../build/ur3_controller/ur3_controller.egg-info/dependency_links.txt
+writing entry points to ../../build/ur3_controller/ur3_controller.egg-info/entry_points.txt
+writing requirements to ../../build/ur3_controller/ur3_controller.egg-info/requires.txt
+writing top-level names to ../../build/ur3_controller/ur3_controller.egg-info/top_level.txt
+reading manifest file '../../build/ur3_controller/ur3_controller.egg-info/SOURCES.txt'
+writing manifest file '../../build/ur3_controller/ur3_controller.egg-info/SOURCES.txt'
+running build
+running build_py
+copying ur3_controller/tool_executor.py -> /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller
+running install
+running install_lib
+copying /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller/tool_executor.py -> /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller
+byte-compiling /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller/tool_executor.py to tool_executor.cpython-310.pyc
+Sorry: IndentationError: expected an indented block after function definition on line 200 (tool_executor.py, line 201)
+running install_data
+running install_egg_info
+removing '/home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/ur3_controller/ur3_controller.egg-info to /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller-0.0.0-py3.10.egg-info
+running install_scripts
+Installing ur3_controller_node script to /home/ubuntu/ros2_ws/install/ur3_controller/lib/ur3_controller
+writing list of installed files to '/home/ubuntu/ros2_ws/build/ur3_controller/install.log'

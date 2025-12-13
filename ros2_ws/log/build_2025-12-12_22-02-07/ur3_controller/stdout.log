@@ -1,0 +1,48 @@
+running develop
+Removing /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3-controller.egg-link (link to .)
+running egg_info
+writing ../../build/ur3_controller/ur3_controller.egg-info/PKG-INFO
+writing dependency_links to ../../build/ur3_controller/ur3_controller.egg-info/dependency_links.txt
+writing entry points to ../../build/ur3_controller/ur3_controller.egg-info/entry_points.txt
+writing requirements to ../../build/ur3_controller/ur3_controller.egg-info/requires.txt
+writing top-level names to ../../build/ur3_controller/ur3_controller.egg-info/top_level.txt
+reading manifest file '../../build/ur3_controller/ur3_controller.egg-info/SOURCES.txt'
+writing manifest file '../../build/ur3_controller/ur3_controller.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/ubuntu/ros2_ws/build/ur3_controller/build
+creating /home/ubuntu/ros2_ws/build/ur3_controller/build/lib
+creating /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller
+copying ur3_controller/server_node.py -> /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller
+copying ur3_controller/__init__.py -> /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller
+copying ur3_controller/tool_executor.py -> /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller
+copying ur3_controller/planner.py -> /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller
+copying ur3_controller/ur3_controller_node.py -> /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller
+copying ur3_controller/gemini_interface.py -> /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller
+copying ur3_controller/defined_tools.py -> /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller
+running install
+running install_lib
+creating /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller
+copying /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller/server_node.py -> /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller
+copying /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller/__init__.py -> /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller
+copying /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller/tool_executor.py -> /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller
+copying /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller/planner.py -> /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller
+copying /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller/ur3_controller_node.py -> /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller
+copying /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller/gemini_interface.py -> /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller
+copying /home/ubuntu/ros2_ws/build/ur3_controller/build/lib/ur3_controller/defined_tools.py -> /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller
+byte-compiling /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller/server_node.py to server_node.cpython-310.pyc
+byte-compiling /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller/tool_executor.py to tool_executor.cpython-310.pyc
+byte-compiling /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller/planner.py to planner.cpython-310.pyc
+byte-compiling /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller/ur3_controller_node.py to ur3_controller_node.cpython-310.pyc
+byte-compiling /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller/gemini_interface.py to gemini_interface.cpython-310.pyc
+byte-compiling /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller/defined_tools.py to defined_tools.cpython-310.pyc
+running install_data
+copying resource/ur3_controller -> /home/ubuntu/ros2_ws/install/ur3_controller/share/ament_index/resource_index/packages
+copying package.xml -> /home/ubuntu/ros2_ws/install/ur3_controller/share/ur3_controller
+copying ur3_controller/config/tools.yaml -> /home/ubuntu/ros2_ws/install/ur3_controller/share/ur3_controller/config
+running install_egg_info
+Copying ../../build/ur3_controller/ur3_controller.egg-info to /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller-0.0.0-py3.10.egg-info
+running install_scripts
+Installing ur3_controller_node script to /home/ubuntu/ros2_ws/install/ur3_controller/lib/ur3_controller
+writing list of installed files to '/home/ubuntu/ros2_ws/build/ur3_controller/install.log'

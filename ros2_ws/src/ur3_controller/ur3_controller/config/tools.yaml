@@ -1,0 +1,48 @@
+tools:
+  - name: move_to_position
+    description: "Move the end-effector to absolute XYZ using IK."
+    params:
+      x: {type: float, required: true}
+      y: {type: float, required: true}
+      z: {type: float, required: true}
+
+  - name: move_relative
+    description: "Move end-effector relative to current pose."
+    params:
+      dx: {type: float, required: true}
+      dy: {type: float, required: true}
+      dz: {type: float, required: true}
+
+  - name: open_gripper
+    description: "Open the gripper fully."
+    params: {}
+
+  - name: close_gripper
+    description: "Close the gripper fully."
+    params: {}
+
+  - name: pick_object
+    description: "Pick an object by approaching, descending, gripping, lifting."
+    params:
+      object_name: {type: string, required: true}
+
+  - name: place_object_at
+    description: "Place held object at XYZ position."
+    params:
+      x: {type: float, required: true}
+      y: {type: float, required: true}
+      z: {type: float, required: true}
+
+  - name: press_button
+    description: "Press a button-like object."
+    params:
+      button_name: {type: string, required: true}
+
+  - name: get_world_state
+    description: "Return robot and object state."
+    params: {}
+
+  - name: wait_until_still
+    description: "Wait until the robot stops moving."
+    params:
+      timeout_s: {type: float, required: true}

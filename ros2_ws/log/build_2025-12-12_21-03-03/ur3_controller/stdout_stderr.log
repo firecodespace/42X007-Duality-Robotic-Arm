@@ -1,0 +1,24 @@
+running develop
+running egg_info
+creating ur3_controller.egg-info
+writing ur3_controller.egg-info/PKG-INFO
+writing dependency_links to ur3_controller.egg-info/dependency_links.txt
+writing entry points to ur3_controller.egg-info/entry_points.txt
+writing requirements to ur3_controller.egg-info/requires.txt
+writing top-level names to ur3_controller.egg-info/top_level.txt
+writing manifest file 'ur3_controller.egg-info/SOURCES.txt'
+reading manifest file 'ur3_controller.egg-info/SOURCES.txt'
+writing manifest file 'ur3_controller.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3-controller.egg-link (link to .)
+Installing ur3_controller_node script to /home/ubuntu/ros2_ws/install/ur3_controller/lib/ur3_controller
+
+Installed /home/ubuntu/ros2_ws/build/ur3_controller
+running symlink_data
+creating /home/ubuntu/ros2_ws/install/ur3_controller/share/ament_index
+creating /home/ubuntu/ros2_ws/install/ur3_controller/share/ament_index/resource_index
+creating /home/ubuntu/ros2_ws/install/ur3_controller/share/ament_index/resource_index/packages
+symbolically linking /home/ubuntu/ros2_ws/build/ur3_controller/resource/ur3_controller -> /home/ubuntu/ros2_ws/install/ur3_controller/share/ament_index/resource_index/packages
+symbolically linking /home/ubuntu/ros2_ws/build/ur3_controller/package.xml -> /home/ubuntu/ros2_ws/install/ur3_controller/share/ur3_controller
+creating /home/ubuntu/ros2_ws/install/ur3_controller/share/ur3_controller/config
+symbolically linking /home/ubuntu/ros2_ws/build/ur3_controller/ur3_controller/config/tools.yaml -> /home/ubuntu/ros2_ws/install/ur3_controller/share/ur3_controller/config

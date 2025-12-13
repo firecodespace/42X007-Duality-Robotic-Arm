@@ -1,0 +1,21 @@
+[0.907s] Invoking command in '/home/ubuntu/ros2_ws/src/ur3_controller': PYTHONPATH=/home/ubuntu/ros2_ws/build/ur3_controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/ur3_controller build --build-base /home/ubuntu/ros2_ws/build/ur3_controller/build install --record /home/ubuntu/ros2_ws/build/ur3_controller/install.log --single-version-externally-managed install_data
+[1.207s] running egg_info
+[1.207s] writing ../../build/ur3_controller/ur3_controller.egg-info/PKG-INFO
+[1.207s] writing dependency_links to ../../build/ur3_controller/ur3_controller.egg-info/dependency_links.txt
+[1.207s] writing entry points to ../../build/ur3_controller/ur3_controller.egg-info/entry_points.txt
+[1.208s] writing requirements to ../../build/ur3_controller/ur3_controller.egg-info/requires.txt
+[1.208s] writing top-level names to ../../build/ur3_controller/ur3_controller.egg-info/top_level.txt
+[1.210s] reading manifest file '../../build/ur3_controller/ur3_controller.egg-info/SOURCES.txt'
+[1.211s] writing manifest file '../../build/ur3_controller/ur3_controller.egg-info/SOURCES.txt'
+[1.211s] running build
+[1.212s] running build_py
+[1.212s] running install
+[1.213s] running install_lib
+[1.214s] running install_data
+[1.214s] running install_egg_info
+[1.217s] removing '/home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller-0.0.0-py3.10.egg-info' (and everything under it)
+[1.218s] Copying ../../build/ur3_controller/ur3_controller.egg-info to /home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages/ur3_controller-0.0.0-py3.10.egg-info
+[1.219s] running install_scripts
+[1.248s] Installing ur3_controller_node script to /home/ubuntu/ros2_ws/install/ur3_controller/lib/ur3_controller
+[1.558s] writing list of installed files to '/home/ubuntu/ros2_ws/build/ur3_controller/install.log'
+[1.591s] Invoked command in '/home/ubuntu/ros2_ws/src/ur3_controller' returned '0': PYTHONPATH=/home/ubuntu/ros2_ws/build/ur3_controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ubuntu/ros2_ws/install/ur3_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/ur3_controller build --build-base /home/ubuntu/ros2_ws/build/ur3_controller/build install --record /home/ubuntu/ros2_ws/build/ur3_controller/install.log --single-version-externally-managed install_data
